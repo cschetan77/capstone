@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs');
 
 const connectToDb = require("../db/connection");
 
@@ -8,8 +9,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const PORT = 8080;
 
-app.listen(8080, "0.0.0.0", () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("serever is runing at port 8080");
 });
 
@@ -135,4 +137,10 @@ app.post("/add/ngo", async (req, res) => {
     status: 201,
     ...result
   });
+});
+
+// GET for certificate
+app.get('/.well-known/pki-validation/', (req, res) => {
+  const file = fs.readFileSync(__dirname + '/1C5BE48CF368BE32813D46B3ABD935EA.txt', 'utf-8');
+  res.send(file);
 });
